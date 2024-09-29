@@ -7,12 +7,14 @@ interface prefecturesType {
   prefName: string;
 }
 
-const PrefectureSelectionArea = () => {
+interface selectProps {
+  onSelectPrefecture: (checkedStates: prefecturesType[]) => void;
+}
+
+const PrefectureSelectionArea = ({ onSelectPrefecture }: selectProps) => {
   const apikey = process.env.NEXT_PUBLIC_X_API_KEY;
-  const [prefectures, setprefectures] = useState<prefecturesType[]>([]);
-  const [checkedStates, setCheckedStates] = useState<{
-    [key: number]: boolean;
-  }>({});
+  const [prefectures, setPrefectures] = useState<prefecturesType[]>([]);
+  const [checkedStates, setCheckedStates] = useState<prefecturesType[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,37 +29,41 @@ const PrefectureSelectionArea = () => {
           },
         );
         const data = await response.json();
-        setprefectures(data.result);
+        setPrefectures(data.result);
       }
     };
     fetchData();
   }, [apikey]);
 
-  const handleChange = (prefCode: number) => {
-    setCheckedStates((prevState) => ({
-      ...prevState,
-      [prefCode]: !prevState[prefCode],
-    }));
+  const handleChange = (prefecture: prefecturesType) => {
+    setCheckedStates((prevState) => {
+      const updatedStates = prevState.some(
+        (p) => p.prefCode === prefecture.prefCode,
+      )
+        ? prevState.filter((p) => p.prefCode !== prefecture.prefCode)
+        : [...prevState, prefecture];
+
+      onSelectPrefecture(updatedStates);
+      return updatedStates;
+    });
   };
 
   return (
     <div>
-      <h1>都道府県表示</h1>
-      {prefectures &&
-        prefectures.map((prefecture: prefecturesType) => (
-          <button
-            key={prefecture.prefCode}
-            className="p-2 border rounded-lg m-1"
-          >
-            <input
-              type="checkbox"
-              checked={checkedStates[prefecture.prefCode] || false}
-              onChange={() => handleChange(prefecture.prefCode)}
-              className="mr-2"
-            />
-            {prefecture.prefName}
-          </button>
-        ))}
+      <h1 className="text-center text-3xl py-5">都道府県ごとの人口推移グラフ</h1>
+      {prefectures.map((prefecture) => (
+        <button key={prefecture.prefCode} className="p-2 border rounded-lg m-1">
+          <input
+            type="checkbox"
+            checked={checkedStates.some(
+              (p) => p.prefCode === prefecture.prefCode,
+            )}
+            onChange={() => handleChange(prefecture)}
+            className="mr-2"
+          />
+          {prefecture.prefName}
+        </button>
+      ))}
     </div>
   );
 };
