@@ -10,12 +10,14 @@ interface prefecturesType {
 
 interface GraphDisplayProps {
   selectedPrefecture: prefecturesType[];
+  index: number;
 }
 
-const GraphDisplayArea = ({ selectedPrefecture }: GraphDisplayProps) => {
+const GraphDisplayArea = ({ selectedPrefecture, index }: GraphDisplayProps) => {
   const [seriesData, setSeriesData] = useState<Highcharts.SeriesOptionsType[]>(
     [],
   );
+  const [label, setLabel] = useState<string>("");
 
   useEffect(() => {
     const fetchPopulationData = async (prefCode: number) => {
@@ -37,13 +39,19 @@ const GraphDisplayArea = ({ selectedPrefecture }: GraphDisplayProps) => {
         }
 
         const data = await response.json();
-        if (data && data.result && data.result.data && data.result.data[0]) {
-          const values = data.result.data[0].data.map(
+        if (
+          data &&
+          data.result &&
+          data.result.data &&
+          data.result.data[index]
+        ) {
+          const values = data.result.data[index].data.map(
             (item: { value: number }) => item.value,
           );
           const prefecture = selectedPrefecture.find(
             (p) => p.prefCode === prefCode,
           );
+          setLabel(data.result.data[index].label);
 
           return {
             name: prefecture?.prefName,
@@ -74,32 +82,32 @@ const GraphDisplayArea = ({ selectedPrefecture }: GraphDisplayProps) => {
     };
 
     updateSeriesData();
-  }, [selectedPrefecture]);
+  }, [selectedPrefecture, index]);
 
   const options: Highcharts.Options = {
     title: {
-      text: "グラフ",
+      text: `${label}グラフ`,
     },
     xAxis: {
       categories: [
-        "1960",
-        "1965",
-        "1970",
-        "1975",
-        "1980",
-        "1985",
-        "1990",
-        "1995",
-        "2000",
-        "2005",
-        "2010",
-        "2015",
-        "2020",
-        "2025",
-        "2030",
-        "2035",
-        "2040",
-        "2045",
+        "1960年",
+        "1965年",
+        "1970年",
+        "1975年",
+        "1980年",
+        "1985年",
+        "1990年",
+        "1995年",
+        "2000年",
+        "2005年",
+        "2010年",
+        "2015年",
+        "2020年",
+        "2025年",
+        "2030年",
+        "2035年",
+        "2040年",
+        "2045年",
       ],
     },
     yAxis: {
