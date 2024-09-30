@@ -9,20 +9,28 @@ interface prefecturesType {
   prefName: string;
 }
 
-export default function Home() {
+export default function page() {
   const [selectedPrefecture, setSelectedPrefecture] = useState<
     prefecturesType[]
   >([]);
+  const [selectedOptions, setSelectedOptions] = useState<number>(0);
 
   const handlePrefectureSelect = (checkedStates: prefecturesType[]) => {
     setSelectedPrefecture(checkedStates);
+  };
+  const handleOptionChange = (index: number) => {
+    setSelectedOptions(index);
+    console.log("選択されたオプション:", index);
   };
 
   return (
     <div>
       <PrefectureSelectionArea onSelectPrefecture={handlePrefectureSelect} />
-      <GraphDisplayArea selectedPrefecture={selectedPrefecture} />
-      <GraphOptionArea />
+      <GraphDisplayArea
+        selectedPrefecture={selectedPrefecture}
+        index={selectedOptions}
+      />
+      <GraphOptionArea onOptionChange={handleOptionChange} />
     </div>
   );
 }
