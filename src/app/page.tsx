@@ -20,7 +20,6 @@ export default function page() {
   };
   const handleOptionChange = (index: number) => {
     setSelectedOptions(index);
-    console.log("選択されたオプション:", index);
   };
 
   return (
