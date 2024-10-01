@@ -17,22 +17,24 @@ const GraphOptionArea = ({ onOptionChange }: GraphOptionAreaProps) => {
   return (
     <div className="text-center">
       <h2>オプション選択</h2>
-      {buttonDatas.map((buttonData: string, index: number) => (
-        <button
-          key={index}
-          className="p-2 border rounded-lg m-1"
-          onClick={() => handleChange(index)}
-        >
-          <input
-            type="radio"
-            name="option"
-            className="mr-2"
-            checked={selectedIndex === index}
-            onChange={() => handleChange(index)}
-          />
-          {buttonData}
-        </button>
-      ))}
+      <div className="grid grid-cols-2 md:block m-3">
+        {buttonDatas.map((buttonData: string, index: number) => (
+          <button
+            key={index}
+            className="p-1 lg:p-2 border rounded-lg m-1"
+            onClick={() => handleChange(index)}
+          >
+            <input
+              type="radio"
+              name="option"
+              className="mr-2"
+              checked={selectedIndex === index}
+              onChange={() => handleChange(index)}
+            />
+            {buttonData}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };

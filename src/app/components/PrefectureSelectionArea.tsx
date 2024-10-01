@@ -50,9 +50,11 @@ const PrefectureSelectionArea = ({ onSelectPrefecture }: selectProps) => {
 
   return (
     <div>
-      <h1 className="text-center text-3xl py-5">都道府県ごとの人口推移グラフ</h1>
+      <h1 className="text-2xl text-center lg:text-3xl py-5 ">
+        都道府県ごとの人口推移グラフ
+      </h1>
       {prefectures.map((prefecture) => (
-        <button key={prefecture.prefCode} className="p-2 border rounded-lg m-1">
+        <button key={prefecture.prefCode} className="p-1 lg:p-2 border rounded-lg m-1">
           <input
             type="checkbox"
             checked={checkedStates.some(
